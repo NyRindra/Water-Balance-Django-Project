@@ -1,0 +1,1367 @@
+{%extends "base.html"%}
+{%block title%} Résultats {%endblock title%}
+{%block content2%}
+
+<style>
+
+
+    table {
+    position:relative;
+    font-size:12px;
+    font-weight: normal;
+    border-collapse:collapse;
+    width:100%;
+    white-space:nowrap;    /* Make the border of all cell to be unique*/
+    background-color:white;
+    border: 5px solid rgb(255 255 255);
+    color: #1A2929;
+    display:block;
+    }
+    thead{
+    color:#ffffff;
+    background: #1A2929
+    }
+    td,th{
+    text-align:center;
+    padding:8px;
+    border-right:1px solid #1A2929
+    }
+    td:nth-child(even){
+    background:#9EDFD3
+    }
+
+    tbody, thead th{
+    display:block
+    }
+    thead th:last-child{
+    border-bottom:none
+    }
+    thead{
+    float:left
+    }
+    tbody{
+    width:auto;
+    position:relative;
+    overflow-x: auto;
+    }
+
+    td,th{
+    padding: 20px .625em .625em .625em;
+    vertical-align:middle;
+    box-sizing: border-box;
+    overflow-x:hidden;
+    overflow-y:auto;
+    width:120px;
+    font-size:13px;
+    text-overflow:ellipsis;
+    }
+
+    tbody tr{
+    display:table-cell
+    }
+    tbody td{
+    display:block
+    }
+
+
+
+    .resultoption{
+    display:inline;
+
+    }
+
+    @media only screen and (max-width:767px){
+    .col-2{                /*Css responsive W3 SCHOOL "RWD MEDIA QUERIES"*/
+    position:static;
+    width:100%
+    }
+    }
+
+</style>
+
+
+
+
+<div id="divname">
+    <div id="divname1">
+    <address>
+    <p id="name">{{logged_user.prénom}} {{logged_user.nom}}</p>
+    <p id="function">
+        {% if logged_user.person_type == "student"%}
+        Etudiant en
+            {% if logged_user.année == 1 %}
+                {{ logged_user.année }}ère
+            {%else%}
+                {{logged_user.année}}ème
+            {% endif %}
+            année
+            ({{logged_user.cursus.title}})
+        {% else %}
+           <!-- {{logged_user.job.title|capfirst}} dans {{logged_user.faculty}}  fomba fampiasa raha mampiasa foreign key-->
+            {{logged_user.poste|capfirst}} à {{logged_user.lieu_de_travail}}
+        {%endif%}
+    </p>
+    <address>
+        <div id="deconnecter"><a href="/login">Se déconnecter</a></div>
+    </div>
+</div>
+<div class="row"> <!--Css responsive RWD W3 SCHOOL-->
+
+    <div class="col-2 menu">
+        <ul class="dropdown">
+
+            {%for i in Nb_année%}
+            {% if i == 1 %}
+            <li  id="{{i}}" onclick="affichage{{i}}()" >{{Année1}}</li>
+            {% elif i == 2 %}
+            <li id="{{i}}" onclick="affichage{{i}}()">{{Année2}}</li>
+            {% elif i == 3 %}
+            <li  id="{{i}}" onclick="affichage{{i}}()">{{Année3}}</li>
+            {% elif i == 4 %}
+            <li  id="{{i}}" onclick="affichage{{i}}()">{{Année4}}</li>
+            {% elif i == 5 %}
+            <li  id="{{i}}" onclick="affichage{{i}}()">{{Année5}}</li>
+            {% elif i == 6 %}
+            <li  id="{{i}}" onclick="affichage{{i}}()">{{Année6}}</li>
+            {% elif i == 7 %}
+            <li  id="{{i}}" onclick="affichage{{i}}()">{{Année7}}</li>
+            {% elif i == 8 %}
+            <li  id="{{i}}" onclick="affichage{{i}}()">{{Année8}}</li>
+            {% elif i == 9 %}
+            <li  id="{{i}}" onclick="affichage{{i}}()">{{Année9}}</li>
+            {% elif i == 10 %}
+            <li  id="{{i}}" onclick="affichage{{i}}()">{{Année10}}</li>
+            {%endif%}
+            {%endfor%}
+            <li id="annualchart" onclick="affichageannuel()"> Annuel </li>
+            <p id="Excel" onclick="reload()" style="text-align: center; cursor:pointer"> Excel </p>
+            <p id="telecharger" style="display:none; text-align: center;" style="text-align:center"> <a href="/media.com/{{logged_user.fichiercalculé.name}}" download> Telecharger </a></p>
+
+        </ul>
+
+    </div>
+
+
+    <div class="col-8" style="display:block">
+
+        <h1 style="margin:0">RESULTATS {{Methode}} </h1>
+
+        <canvas id="myannualchart" style="color:white; display:block"></canvas>
+        <script>
+            var cty = document.getElementById('myannualchart').getContext('2d');
+            var sary = new Chart (cty, {
+                type:'bar',
+                data:{
+                    labels:{{Année}},
+                    datasets:[{
+                        label:'ETP',
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: "rgb(255, 99, 132)",
+                        lineTension:0.4,
+                        data: {{ETPsum}}
+                        },
+                        {
+                        label:'ETR',
+                        backgroundColor: 'green',
+                        borderColor: "rgb(255, 99, 132)",
+                        lineTension:0.4,
+                        data: {{ETRsum}}
+                        },
+                        {
+                        label:'Ruissellement',
+                        backgroundColor: 'blue',
+                        borderColor: "rgb(255, 99, 132)",
+                        lineTension:0.4,
+                        data: {{RUISSsum}}
+                        },
+                        {
+                        label:'Déficit',
+                        backgroundColor: 'red',
+                        borderColor: "rgb(255, 99, 132)",
+                        lineTension:0.4,
+                        data: {{DEFICITsum}}
+                        },
+                        {
+                        label:'RFU',
+                        backgroundColor: 'brown',
+                        borderColor: "rgb(255, 99, 132)",
+                        lineTension:0.4,
+                        data: {{RFUsum}}
+                        },
+
+                    ]
+                },
+            });
+        </script>
+
+
+        {% for i in Nb_année %}
+        <div class="courbe">    <!-- ilaiko anaovana affichage fotsiny ito div ito fa tsy fizarana ecran-->
+        <canvas id="myChart{{i}}" ></canvas>
+        <script>
+            var ctx = document.getElementById('myChart{{i}}').getContext('2d');
+            var chart = new Chart (ctx, {
+                type:'line',
+                data:{
+                    labels:['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre',
+                            'Octobre', 'Novembre', 'Decembre'
+                                ],
+
+                    datasets:[{
+                        label:'ETP',
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: "rgb(255, 99, 132)",
+                        lineTension:0.4,
+
+                        data: {% if i == 1 %}
+                                {{ETP1}}
+                                {% elif i == 2 %}
+                                {{ETP2}}
+                                {% elif i == 3 %}
+                                {{ETP3}}
+                                {% elif i == 4 %}
+                                {{ETP4}}
+                                {% elif i == 5 %}
+                                {{ETP5}}
+                                {% elif i == 6 %}
+                                {{ETP6}}
+                                {% elif i == 7 %}
+                                {{ETP7}}
+                                {% elif i == 8 %}
+                                {{ETP8}}
+                                {% elif i == 9 %}
+                                {{ETP9}}
+                                {% elif i == 10 %}
+                                {{ETP10}}
+                                {%endif%},
+
+                    },
+                    {
+                        label:'ETR',
+                        backgroundColor: 'rgb(100, 150, 255)',
+                        borderColor: "rgb(100, 150, 255)",
+                        lineTension:0.4,
+                        data:{% if i == 1 %}
+                                {{ETR1}}
+                                {% elif i == 2 %}
+                                {{ETR2}}
+                                {% elif i == 3 %}
+                                {{ETR3}}
+                                {% elif i == 4 %}
+                                {{ETR4}}
+                                {% elif i == 5 %}
+                                {{ETR5}}
+                                {% elif i == 6 %}
+                                {{ETR6}}
+                                {% elif i == 7 %}
+                                {{ETR7}}
+                                {% elif i == 8 %}
+                                {{ETR8}}
+                                {% elif i == 9 %}
+                                {{ETR9}}
+                                {% elif i == 10 %}
+                                {{ETR10}}
+                                {%endif%},
+                    },
+                    {
+                        label:'Ruissellement',
+                        backgroundColor: 'red',
+                        borderColor: "red",
+                        lineTension:0.4,
+                        data:{% if i == 1 %}
+                                {{Ruissellement1}}
+                                {% elif i == 2 %}
+                                {{Ruissellement2}}
+                                {% elif i == 3 %}
+                                {{Ruissellement3}}
+                                {% elif i == 4 %}
+                                {{Ruissellement4}}
+                                {% elif i == 5 %}
+                                {{Ruissellement5}}
+                                {% elif i == 6 %}
+                                {{Ruissellement6}}
+                                {% elif i == 7 %}
+                                {{Ruissellement7}}
+                                {% elif i == 8 %}
+                                {{Ruissellement8}}
+                                {% elif i == 9 %}
+                                {{Ruissellement9}}
+                                {% elif i == 10 %}
+                                {{Ruissellement10}}
+                                {%endif%},
+                    },
+                    {
+                        label:'Deficit',
+                        backgroundColor: 'green',
+                        borderColor: "green",
+                        lineTension:0.4,
+                        data:{% if i == 1 %}
+                                {{Deficit1}}
+                                {% elif i == 2 %}
+                                {{Deficit2}}
+                                {% elif i == 3 %}
+                                {{Deficit3}}
+                                {% elif i == 4 %}
+                                {{Deficit4}}
+                                {% elif i == 5 %}
+                                {{Deficit5}}
+                                {% elif i == 6 %}
+                                {{Deficit6}}
+                                {% elif i == 7 %}
+                                {{Deficit7}}
+                                {% elif i == 8 %}
+                                {{Deficit8}}
+                                {% elif i == 9 %}
+                                {{Deficit9}}
+                                {% elif i == 10 %}
+                                {{Deficit10}}
+                                {%endif%},
+                    },
+                    {
+                        label:'Reserve',
+                        backgroundColor: 'yellow',
+                        borderColor: "yellow",
+                        lineTension:0.4,
+                        data:{% if i == 1 %}
+                                {{RFUparmois1}}
+                                {% elif i == 2 %}
+                                {{RFUparmois2}}
+                                {% elif i == 3 %}
+                                {{RFUparmois3}}
+                                {% elif i == 4 %}
+                                {{RFUparmois4}}
+                                {% elif i == 5 %}
+                                {{RFUparmois5}}
+                                {% elif i == 6 %}
+                                {{RFUparmois6}}
+                                {% elif i == 7 %}
+                                {{RFUparmois7}}
+                                {% elif i == 8 %}
+                                {{RFUparmois8}}
+                                {% elif i == 9 %}
+                                {{RFUparmois9}}
+                                {% elif i == 10 %}
+                                {{RFUparmois10}}
+                                {%endif%},
+                    },]
+                },
+            });
+        </script>
+        </div> <!-- tapitra eto ny dic affichage courbe (tsy div fizarana  ecran )-->
+
+        <div class="table" style="width:100%;">   <!-- div affichage table -->
+        <table style="width:100%" id="table{{i}}">
+            <thead>
+            <tr style="text-align:center;">
+                <th>
+                    {% if i == 1 %}
+                    {{Année1}}
+                    {% elif i == 2 %}
+                    {{Année2}}
+                    {% elif i == 3 %}
+                    {{Année3}}
+                    {% elif i == 4 %}
+                    {{Année4}}
+                    {% elif i == 5 %}
+                    {{Année5}}
+                    {% elif i == 6 %}
+                    {{Année6}}
+                    {% elif i == 7 %}
+                    {{Année7}}
+                    {% elif i == 8 %}
+                    {{Année8}}
+                    {% elif i == 9 %}
+                    {{Année9}}
+                    {% elif i == 10 %}
+                    {{Année10}}
+                    {%endif%}
+                </th>
+                <th>Janvier</th>
+                <th>Fevrier</th>
+                <th>Mars</th>
+                <th>Avril</th>
+                <th>Mai</th>
+                <th>Juin</th>
+                <th>Juillet</th>
+                <th>Aout</th>
+                <th>Septembre</th>
+                <th>Octobre</th>
+                <th>Novembre</th>
+                <th>Decembre</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% if i == 1 %}
+            <tr>
+                <td>ETP</td>
+                {%for i in ETP1%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+                <td> ETR </td>
+                {%for i in ETR1%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+
+            <tr>
+                <td> Variation des stocks </td>
+                {%for i in VariationStock1%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> RFU </td>
+                {%for i in RFUparmois1%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> E </td>
+                {%for i in Ruissellement1%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> Deficit </td>
+                {%for i in Deficit1%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            {% elif i == 2 %}
+            <tr>
+                <td>ETP</td>
+                {%for i in ETP2%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+                <td> ETR </td>
+                {%for i in ETR2%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+
+            <tr>
+                <td> Variation des stocks </td>
+                {%for i in VariationStock2%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> RFU </td>
+                {%for i in RFUparmois2%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> E </td>
+                {%for i in Ruissellement2%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> Deficit </td>
+                {%for i in Deficit2%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            {% elif i == 3 %}
+
+            <tr>
+                <td>ETP</td>
+                {%for i in ETP3%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+                <td> ETR </td>
+                {%for i in ETR3%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+
+            <tr>
+                <td> Variation des stocks </td>
+                {%for i in VariationStock3%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> RFU </td>
+                {%for i in RFUparmois3%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> E </td>
+                {%for i in Ruissellement3%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> Deficit </td>
+                {%for i in Deficit3%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            {% elif i == 4 %}
+
+            <tr>
+                <td>ETP</td>
+                {%for i in ETP4%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+                <td> ETR </td>
+                {%for i in ETR4%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+
+            <tr>
+                <td> Variation des stocks </td>
+                {%for i in VariationStock4%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> RFU </td>
+                {%for i in RFUparmois4%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> E </td>
+                {%for i in Ruissellement4%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> Deficit </td>
+                {%for i in Deficit4%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            {% elif i == 5 %}
+
+            <tr>
+                <td>ETP</td>
+                {%for i in ETP5%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+                <td> ETR </td>
+                {%for i in ETR5%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+
+            <tr>
+                <td> Variation des stocks </td>
+                {%for i in VariationStock5%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> RFU </td>
+                {%for i in RFUparmois5%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> E </td>
+                {%for i in Ruissellement5%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> Deficit </td>
+                {%for i in Deficit5%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            {% elif i == 6 %}
+
+            <tr>
+                <td>ETP</td>
+                {%for i in ETP6%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+                <td> ETR </td>
+                {%for i in ETR6%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+
+            <tr>
+                <td> Variation des stocks </td>
+                {%for i in VariationStock6%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> RFU </td>
+                {%for i in RFUparmois6%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> E </td>
+                {%for i in Ruissellement6%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> Deficit </td>
+                {%for i in Deficit6%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            {% elif i == 7 %}
+
+            <tr>
+                <td>ETP</td>
+                {%for i in ETP7%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+                <td> ETR </td>
+                {%for i in ETR7%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+
+            <tr>
+                <td> Variation des stocks </td>
+                {%for i in VariationStock7%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> RFU </td>
+                {%for i in RFUparmois7%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> E </td>
+                {%for i in Ruissellement7%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> Deficit </td>
+                {%for i in Deficit7%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            {% elif i == 8 %}
+
+            <tr>
+                <td>ETP</td>
+                {%for i in ETP8%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+                <td> ETR </td>
+                {%for i in ETR8%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+
+            <tr>
+                <td> Variation des stocks </td>
+                {%for i in VariationStock8%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> RFU </td>
+                {%for i in RFUparmois8%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> E </td>
+                {%for i in Ruissellement8%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> Deficit </td>
+                {%for i in Deficit8%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            {% elif i == 9 %}
+
+            <tr>
+                <td>ETP</td>
+                {%for i in ETP9%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+                <td> ETR </td>
+                {%for i in ETR9%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+
+            <tr>
+                <td> Variation des stocks </td>
+                {%for i in VariationStock9%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> RFU </td>
+                {%for i in RFUparmois9%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> E </td>
+                {%for i in Ruissellement9%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> Deficit </td>
+                {%for i in Deficit9%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            {% elif i == 10 %}
+
+            <tr>
+                <td>ETP</td>
+                {%for i in ETP10%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+                <td> ETR </td>
+                {%for i in ETR10%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+
+            <tr>
+                <td> Variation des stocks </td>
+                {%for i in VariationStock10%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> RFU </td>
+                {%for i in RFUparmois10%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> E </td>
+                {%for i in Ruissellement10%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+            <tr>
+                <td> Deficit </td>
+                {%for i in Deficit10%}
+                <td>{{i}}</td>
+                {% endfor %}
+            </tr>
+            {% endif %}
+            </tbody>
+
+        </table>
+        </div>   <!--mifarana eto ny div tableau -->
+        {%endfor%}
+
+        </div>
+
+        <div class="col-2 menu">
+            <li onclick="table()" style="list-style-type:none;" id="btntable">Tableau</li>
+            <li onclick="courbe()" style="list-style-type:none;" id="btncourbe">Courbes</li>
+
+
+        </div>
+        <div class="col-12">
+            <address  style="text-align: center; font-size:12px">
+        Créé par RAKOTONOELY Ny Rindra Harilala<br>
+        Etudiant à l'ESPA - Météorologie<br>
+        <a href="mailto:ny.rindra.rk@gmail.com">ny.rindra.rk@gmail.com</a>
+        <!--<p>{{dat|date:"d F Y , H:i:s"}}</p>-->
+        </address>
+
+    </div>    
+
+
+    <script>
+    $(document).ready(function(){
+        $("#{{1}}").css("background-color", "#ffecf37c");
+        $("#{{2}}").css("background-color", "#21277c");
+        $("#{{3}}").css("background-color", "#21277c");
+        $("#{{4}}").css("background-color", "#21277c");
+        $("#{{5}}").css("background-color", "#21277c");
+        $("#{{6}}").css("background-color", "#21277c");
+        $("#{{7}}").css("background-color", "#21277c");
+        $("#{{8}}").css("background-color", "#21277c");
+        $("#{{9}}").css("background-color", "#21277c");
+        $("#{{10}}").css("background-color", "#21277c");
+        $("#annualchart").css("background-color", "#21277c");
+        $("#myannualchart").hide();
+
+        $("#myChart1").show();
+        $("#myChart2").hide();
+        $("#myChart3").hide();
+        $("#myChart4").hide();
+        $("#myChart5").hide();
+        $("#myChart6").hide();
+        $("#myChart7").hide();
+        $("#myChart8").hide();
+        $("#myChart9").hide();
+        $("#myChart10").hide();
+
+        $("#table1").show();
+        $("#table2").hide();
+        $("#table3").hide();
+        $("#table4").hide();
+        $("#table5").hide();
+        $("#table6").hide();
+        $("#table7").hide();
+        $("#table8").hide();
+        $("#table9").hide();
+        $("#table10").hide();
+
+        $(".table").hide(); // tsy aseho aloha ilay div table
+
+        $("#btntable").css("display", "block");
+        $("#btncourbe").css("display", "block");
+    });
+
+    {% for i in Nb_année %}
+
+        function affichage{{i}}(){
+        $("#btntable").css("display", "block");
+        $("#btncourbe").css("display", "block");
+
+        {% if i == 1 %}
+        $("#{{1}}").css("background-color", "#ffecf37c");
+        $("#{{2}}").css("background-color", "#21277c");
+        $("#{{3}}").css("background-color", "#21277c");
+        $("#{{4}}").css("background-color", "#21277c");
+        $("#{{5}}").css("background-color", "#21277c");
+        $("#{{6}}").css("background-color", "#21277c");
+        $("#{{7}}").css("background-color", "#21277c");
+        $("#{{8}}").css("background-color", "#21277c");
+        $("#{{9}}").css("background-color", "#21277c");
+        $("#{{10}}").css("background-color", "#21277c");
+        $("#annualchart").css("background-color", "#21277c");
+        $("#myannualchart").hide();
+
+        $("#myChart1").show();
+        $("#myChart2").hide();
+        $("#myChart3").hide();
+        $("#myChart4").hide();
+        $("#myChart5").hide();
+        $("#myChart6").hide();
+        $("#myChart7").hide();
+        $("#myChart8").hide();
+        $("#myChart9").hide();
+        $("#myChart10").hide();
+
+
+        $("#table1").show();
+        $("#table2").hide();
+        $("#table3").hide();
+        $("#table4").hide();
+        $("#table5").hide();
+        $("#table6").hide();
+        $("#table7").hide();
+        $("#table8").hide();
+        $("#table9").hide();
+        $("#table10").hide();
+        };
+
+
+
+        {% elif i == 2 %}
+        $("#{{1}}").css("background-color", "#21277c");
+        $("#{{2}}").css("background-color", "#ffecf37c");
+        $("#{{3}}").css("background-color", "#21277c");
+        $("#{{4}}").css("background-color", "#21277c");
+        $("#{{5}}").css("background-color", "#21277c");
+        $("#{{6}}").css("background-color", "#21277c");
+        $("#{{7}}").css("background-color", "#21277c");
+        $("#{{8}}").css("background-color", "#21277c");
+        $("#{{9}}").css("background-color", "#21277c");
+        $("#{{10}}").css("background-color", "#21277c");
+        $("#annualchart").css("background-color", "#21277c");
+        $("#myannualchart").hide();
+
+        $("#myChart1").hide();
+        $("#myChart2").show();
+        $("#myChart3").hide();
+        $("#myChart4").hide();
+        $("#myChart5").hide();
+        $("#myChart6").hide();
+        $("#myChart7").hide();
+        $("#myChart8").hide();
+        $("#myChart9").hide();
+        $("#myChart10").hide();
+
+
+        $("#table1").hide();
+        $("#table2").show();
+        $("#table3").hide();
+        $("#table4").hide();
+        $("#table5").hide();
+        $("#table6").hide();
+        $("#table7").hide();
+        $("#table8").hide();
+        $("#table9").hide();
+        $("#table10").hide();
+        };
+
+
+        {% elif i == 3 %}
+        $("#{{1}}").css("background-color", "#21277c");
+        $("#{{2}}").css("background-color", "#21277c");
+        $("#{{3}}").css("background-color", "#ffecf37c");
+        $("#{{4}}").css("background-color", "#21277c");
+        $("#{{5}}").css("background-color", "#21277c");
+        $("#{{6}}").css("background-color", "#21277c");
+        $("#{{7}}").css("background-color", "#21277c");
+        $("#{{8}}").css("background-color", "#21277c");
+        $("#{{9}}").css("background-color", "#21277c");
+        $("#{{10}}").css("background-color", "#21277c");
+        $("#annualchart").css("background-color", "#21277c");
+        $("#myannualchart").hide();
+
+        $("#myChart1").hide();
+        $("#myChart2").hide();
+        $("#myChart3").show();
+        $("#myChart4").hide();
+        $("#myChart5").hide();
+        $("#myChart6").hide();
+        $("#myChart7").hide();
+        $("#myChart8").hide();
+        $("#myChart9").hide();
+        $("#myChart10").hide();
+
+
+        $("#table1").hide();
+        $("#table2").hide();
+        $("#table3").show();
+        $("#table4").hide();
+        $("#table5").hide();
+        $("#table6").hide();
+        $("#table7").hide();
+        $("#table8").hide();
+        $("#table9").hide();
+        $("#table10").hide();
+        };
+
+        {% elif i == 4 %}
+        $("#{{1}}").css("background-color", "#21277c");
+        $("#{{2}}").css("background-color", "#21277c");
+        $("#{{3}}").css("background-color", "#21277c");
+        $("#{{4}}").css("background-color", "#ffecf37c");
+        $("#{{5}}").css("background-color", "#21277c");
+        $("#{{6}}").css("background-color", "#21277c");
+        $("#{{7}}").css("background-color", "#21277c");
+        $("#{{8}}").css("background-color", "#21277c");
+        $("#{{9}}").css("background-color", "#21277c");
+        $("#{{10}}").css("background-color", "#21277c");
+        $("#annualchart").css("background-color", "#21277c");
+        $("#myannualchart").hide();
+
+        $("#myChart1").hide();
+        $("#myChart2").hide();
+        $("#myChart3").hide();
+        $("#myChart4").show();
+        $("#myChart5").hide();
+        $("#myChart6").hide();
+        $("#myChart7").hide();
+        $("#myChart8").hide();
+        $("#myChart9").hide();
+        $("#myChart10").hide();
+
+
+        $("#table1").hide();
+        $("#table2").hide();
+        $("#table3").hide();
+        $("#table4").show();
+        $("#table5").hide();
+        $("#table6").hide();
+        $("#table7").hide();
+        $("#table8").hide();
+        $("#table9").hide();
+        $("#table10").hide();
+        };
+
+        {% elif i == 5 %}
+        $("#{{1}}").css("background-color", "#21277c");
+        $("#{{2}}").css("background-color", "#21277c");
+        $("#{{3}}").css("background-color", "#21277c");
+        $("#{{4}}").css("background-color", "#21277c");
+        $("#{{5}}").css("background-color", "#ffecf37c");
+        $("#{{6}}").css("background-color", "#21277c");
+        $("#{{7}}").css("background-color", "#21277c");
+        $("#{{8}}").css("background-color", "#21277c");
+        $("#{{9}}").css("background-color", "#21277c");
+        $("#{{10}}").css("background-color", "#21277c");
+        $("#annualchart").css("background-color", "#21277c");
+        $("#myannualchart").hide();
+
+        $("#myChart1").hide();
+        $("#myChart2").hide();
+        $("#myChart3").hide();
+        $("#myChart4").hide();
+        $("#myChart5").show();
+        $("#myChart6").hide();
+        $("#myChart7").hide();
+        $("#myChart8").hide();
+        $("#myChart9").hide();
+        $("#myChart10").hide();
+
+
+        $("#table1").hide();
+        $("#table2").hide();
+        $("#table3").hide();
+        $("#table4").hide();
+        $("#table5").show();
+        $("#table6").hide();
+        $("#table7").hide();
+        $("#table8").hide();
+        $("#table9").hide();
+        $("#table10").hide();
+        };
+
+        {% elif i == 6 %}
+        $("#{{1}}").css("background-color", "#21277c");
+        $("#{{2}}").css("background-color", "#21277c");
+        $("#{{3}}").css("background-color", "#21277c");
+        $("#{{4}}").css("background-color", "#21277c");
+        $("#{{5}}").css("background-color", "#21277c");
+        $("#{{6}}").css("background-color", "#ffecf37c");
+        $("#{{7}}").css("background-color", "#21277c");
+        $("#{{8}}").css("background-color", "#21277c");
+        $("#{{9}}").css("background-color", "#21277c");
+        $("#{{10}}").css("background-color", "#21277c");
+        $("#annualchart").css("background-color", "#21277c");
+        $("#myannualchart").hide();
+
+        $("#myChart1").hide();
+        $("#myChart2").hide();
+        $("#myChart3").hide();
+        $("#myChart4").hide();
+        $("#myChart5").hide();
+        $("#myChart6").show();
+        $("#myChart7").hide();
+        $("#myChart8").hide();
+        $("#myChart9").hide();
+        $("#myChart10").hide();
+
+
+        $("#table1").hide();
+        $("#table2").hide();
+        $("#table3").hide();
+        $("#table4").hide();
+        $("#table5").hide();
+        $("#table6").show();
+        $("#table7").hide();
+        $("#table8").hide();
+        $("#table9").hide();
+        $("#table10").hide();
+        };
+        {% elif i == 7 %}
+        $("#{{1}}").css("background-color", "#21277c");
+        $("#{{2}}").css("background-color", "#21277c");
+        $("#{{3}}").css("background-color", "#21277c");
+        $("#{{4}}").css("background-color", "#21277c");
+        $("#{{5}}").css("background-color", "#21277c");
+        $("#{{6}}").css("background-color", "#21277c");
+        $("#{{7}}").css("background-color", "#ffecf37c");
+        $("#{{8}}").css("background-color", "#21277c");
+        $("#{{9}}").css("background-color", "#21277c");
+        $("#{{10}}").css("background-color", "#21277c");
+        $("#annualchart").css("background-color", "#21277c");
+        $("#myannualchart").hide();
+
+        $("#myChart1").hide();
+        $("#myChart2").hide();
+        $("#myChart3").hide();
+        $("#myChart4").hide();
+        $("#myChart5").hide();
+        $("#myChart6").hide();
+        $("#myChart7").show();
+        $("#myChart8").hide();
+        $("#myChart9").hide();
+        $("#myChart10").hide();
+
+
+        $("#table1").hide();
+        $("#table2").hide();
+        $("#table3").hide();
+        $("#table4").hide();
+        $("#table5").hide();
+        $("#table6").hide();
+        $("#table7").show();
+        $("#table8").hide();
+        $("#table9").hide();
+        $("#table10").hide();
+        };
+
+        {% elif i == 8 %}
+        $("#{{1}}").css("background-color", "#21277c");
+        $("#{{2}}").css("background-color", "#21277c");
+        $("#{{3}}").css("background-color", "#21277c");
+        $("#{{4}}").css("background-color", "#21277c");
+        $("#{{5}}").css("background-color", "#21277c");
+        $("#{{6}}").css("background-color", "#21277c");
+        $("#{{7}}").css("background-color", "#21277c");
+        $("#{{8}}").css("background-color", "#ffecf37c");
+        $("#{{9}}").css("background-color", "#21277c");
+        $("#{{10}}").css("background-color", "#21277c");
+        $("#annualchart").css("background-color", "#21277c");
+        $("#myannualchart").hide();
+
+        $("#myChart1").hide();
+        $("#myChart2").hide();
+        $("#myChart3").hide();
+        $("#myChart4").hide();
+        $("#myChart5").hide();
+        $("#myChart6").hide();
+        $("#myChart7").hide();
+        $("#myChart8").show();
+        $("#myChart9").hide();
+        $("#myChart10").hide();
+
+        $("#table1").hide();
+        $("#table2").hide();
+        $("#table3").hide();
+        $("#table4").hide();
+        $("#table5").hide();
+        $("#table6").hide();
+        $("#table7").hide();
+        $("#table8").show();
+        $("#table9").hide();
+        $("#table10").hide();
+        };
+
+        {% elif i == 9 %}
+        $("#{{1}}").css("background-color", "#21277c");
+        $("#{{2}}").css("background-color", "#21277c");
+        $("#{{3}}").css("background-color", "#21277c");
+        $("#{{4}}").css("background-color", "#21277c");
+        $("#{{5}}").css("background-color", "#21277c");
+        $("#{{6}}").css("background-color", "#21277c");
+        $("#{{7}}").css("background-color", "#21277c");
+        $("#{{8}}").css("background-color", "#21277c");
+        $("#{{9}}").css("background-color", "#ffecf37c");
+        $("#{{10}}").css("background-color", "#21277c");
+        $("#annualchart").css("background-color", "#21277c");
+        $("#myannualchart").hide();
+
+        $("#myChart1").hide();
+        $("#myChart2").hide();
+        $("#myChart3").hide();
+        $("#myChart4").hide();
+        $("#myChart5").hide();
+        $("#myChart6").hide();
+        $("#myChart7").hide();
+        $("#myChart8").hide();
+        $("#myChart9").show();
+        $("#myChart10").hide();
+
+        $("#table1").hide();
+        $("#table2").hide();
+        $("#table3").hide();
+        $("#table4").hide();
+        $("#table5").hide();
+        $("#table6").hide();
+        $("#table7").hide();
+        $("#table8").hide();
+        $("#table9").show();
+        $("#table10").hide();
+        };
+
+        {% elif i == 10 %}
+        $("#{{1}}").css("background-color", "#21277c");
+        $("#{{2}}").css("background-color", "#21277c");
+        $("#{{3}}").css("background-color", "#21277c");
+        $("#{{4}}").css("background-color", "#21277c");
+        $("#{{5}}").css("background-color", "#21277c");
+        $("#{{6}}").css("background-color", "#21277c");
+        $("#{{7}}").css("background-color", "#21277c");
+        $("#{{8}}").css("background-color", "#21277c");
+        $("#{{9}}").css("background-color", "#21277c");
+        $("#{{10}}").css("background-color", "#ffecf37c");
+        $("#annualchart").css("background-color", "#21277c");
+        $("#myannualchart").hide();
+
+        $("#myChart1").hide();
+        $("#myChart2").hide();
+        $("#myChart3").hide();
+        $("#myChart4").hide();
+        $("#myChart5").hide();
+        $("#myChart6").hide();
+        $("#myChart7").hide();
+        $("#myChart8").hide();
+        $("#myChart9").hide();
+        $("#myChart10").show();
+
+
+        $("#table1").hide();
+        $("#table2").hide();
+        $("#table3").hide();
+        $("#table4").hide();
+        $("#table5").hide();
+        $("#table6").hide();
+        $("#table7").hide();
+        $("#table8").hide();
+        $("#table9").hide();
+        $("#table10").show();
+        };
+
+        {% endif%}
+
+        function affichageannuel(){
+        $("#{{1}}").css("background-color", "#21277c");
+        $("#{{2}}").css("background-color", "#21277c");
+        $("#{{3}}").css("background-color", "#21277c");
+        $("#{{4}}").css("background-color", "#21277c");
+        $("#{{5}}").css("background-color", "#21277c");
+        $("#{{6}}").css("background-color", "#21277c");
+        $("#{{7}}").css("background-color", "#21277c");
+        $("#{{8}}").css("background-color", "#21277c");
+        $("#{{9}}").css("background-color", "#21277c");
+        $("#{{10}}").css("background-color", "#21277c");
+        $("#annualchart").css("background-color", "#ffecf37c");
+        $("#myannualchart").show();
+
+        $("#myChart1").hide();
+        $("#myChart2").hide();
+        $("#myChart3").hide();
+        $("#myChart4").hide();
+        $("#myChart5").hide();
+        $("#myChart6").hide();
+        $("#myChart7").hide();
+        $("#myChart8").hide();
+        $("#myChart9").hide();
+        $("#myChart10").hide();
+
+        $("#table1").hide();
+        $("#table2").hide();
+        $("#table3").hide();
+        $("#table4").hide();
+        $("#table5").hide();
+        $("#table6").hide();
+        $("#table7").hide();
+        $("#table8").hide();
+        $("#table9").hide();
+        $("#table10").hide();
+
+        $("#btntable").css("display", "none");
+        $("#btncourbe").css("display", "none");
+        };
+
+    {% endfor %}
+    function table(){
+    $(".table").show();
+    $(".courbe").hide();
+
+    $("#btntable").css("background-color","#ffecf37c" );
+    $("#btncourbe").css("background-color", "#21277c");
+    }
+
+    function courbe(){
+    $(".table").hide();
+    $(".courbe").show();
+
+    $("#btntable").css("background-color", "#21277c");
+    $("#btncourbe").css("background-color", "#ffecf37c");
+    }
+    </script>
+</div>
+
+<script>
+            
+            function reload(){
+                window.localStorage.setItem('show_button', 'true');
+                window.location.reload()               
+                };
+
+            
+            if(window.localStorage.getItem('show_button') == 'true') {
+                document.getElementById('telecharger').style.display = 'block';      
+                } 
+
+            else {
+                document.getElementById('telecharger').style.display = 'none';
+                };
+            
+
+</script>
+
+{%endblock content2%}

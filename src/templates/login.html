@@ -1,0 +1,29 @@
+{% extends "base.html"%}                            <!--Extension de base.html-->
+
+{% block title %} Connexion {% endblock title%}     <!--titre Connection-->
+{% block bodyId %} loginPage {% endblock %}         <!--Nous specifions un id Login page au balise body-->
+
+{% block content %}                             <!--debut du contenue reel de notre page Login-->
+
+<h3 id="Login">Veuillez-vous connecter</h3>
+<form action="/login" method = "post" >          <!--io soratra login io tonga dia lasa any amin'ny chemin URL-->
+    {%csrf_token%}          <!--BOKY PAGE 222 et page 278-->
+    {{form.as_p}}           <!--impression du formulaire BOKY PAGE 227 et 228 explication-->
+    <p>     <!--paragraphe pour le bouton de connection et lien vers la page de creation de compte"-->
+        <input type="submit" value="Se connecter"/> <!-- lasa mankany am URL eo amin'ny attribut action
+                                                        io vao mclique submit-->
+        <a href="/register" id="loginandcreateaccount">Créer un compte</a>
+    </p>
+</form>
+
+
+
+{% endblock %}
+
+{% block footer %}
+
+
+
+{% endblock footer %}
+
+

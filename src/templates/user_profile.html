@@ -1,0 +1,73 @@
+{% extends "base.html"%}                            <!--Extension de base.html-->
+
+{% block title %} Création de compte {% endblock title%}     <!--titre Connection-->
+{% block bodyId %} userProfilePage {% endblock %}         <!--Nous specifions un id Login page au balise body-->
+
+{% block content1 %}                             <!--debut du contenue reel de notre page Login-->
+<h1 id="creationcompte">Création d'un compte</h1>
+<form>
+    <label for="selection"> Vous êtes ?</label>
+    <select id="selection" name="option">
+        <option value="student">ETUDIANT</option>
+        <option value="employee">EMPLOYE</option>
+    </select>
+
+</form>
+<!--TSY MAINTSY MISY SLASH EO ALOHAN'NY URL AN'NY ACTION SINON TOHIZANY ILAY URL EFA MISY AO AM NAVIGATEUR-->
+<form action="/register" method = "get" id="studentForm">   <!--io soratra login io tonga dia lasa any amin'ny chemin URL-->
+{% if erreur %}
+    <p style="background-color:red; text-align : center">{{erreur}}</p>
+{% endif %}
+    {{student_formu.as_p}}           <!--impression du formulaire BOKY PAGE 227 et 228 explication-->
+    <p>     <!--paragraphe pour le bouton de connection et lien vers la page de creation de compte"-->
+        <input type = 'hidden' name = 'profileType' value = 'student'/>
+        <input type="submit" value="Créer un compte"/> <!-- lasa mankany am URL eo amin'ny attribut action
+                                                        io vao mclique submit-->
+        <a href="/login"> J'ai déja un compte</a>
+    </p>
+</form>
+
+<form action="/register" method = "get" id="employeeForm">          <!--io soratra login io tonga dia lasa any amin'ny chemin URL-->
+{% if erreur1 %}
+    <p style="background-color:red; text-align : center">{{erreur1}}</p>
+{% endif %}
+    {{employee_formu.as_p}}           <!--impression du formulaire BOKY PAGE 227 et 228 explication-->
+    <p>                 <!--paragraphe pour le bouton de connection et lien vers la page de creation de compte"-->
+        <input type = 'hidden' name = 'profileType' value = 'employee'/>
+        <input type="submit" value="Créer un compte"/> <!-- lasa mankany am URL eo amin'ny attribut action
+                                                        io vao mclique submit-->
+        <br><a href="/login" class="createaccount"> J'ai déja un compte</a>
+    </p>
+</form>
+
+<script type ="text/javascript">
+                                               // anaty boky page 268 de ao anaty jQuery EVENTS W3school
+
+    $(document).ready(function(){
+        $("#id_st-mot_de_passe").attr("type", "password");
+        $("#id_em-mot_de_passe").attr("type", "password");
+        $("#id_st-confirmation").attr("type", "password");
+        $("#id_em-confirmation").attr("type", "password");
+        if ($('#selection').val() == "student"){
+            $('#employeeForm').hide();
+            $('#studentForm').show();
+
+        }
+        else {
+            $('#studentForm').hide();
+            $('#employeeForm').show();
+        }
+    });
+    $('#selection').change(function(){
+        if ($('#selection').val() == "student"){
+            $('#employeeForm').hide();
+            $('#studentForm').show();
+        }
+        else {
+            $('#studentForm').hide();
+            $('#employeeForm').show();
+        }
+    })
+
+</script>
+{% endblock %}

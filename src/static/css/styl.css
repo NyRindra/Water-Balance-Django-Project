@@ -1,0 +1,435 @@
+﻿* {
+  box-sizing: border-box;       /*Css responsive W3 SCHOOL "RWD MEDIA QUERIES"*/
+}
+
+div.row::after {                /*Css responsive W3 SCHOOL "RWD MEDIA QUERIES"*/
+  content: "";
+  clear: both;                  /* afaka manoratra indray ny navigateur ao aorinan'ny fizaraaran'ny page ho colonne*/
+  display: table;
+}
+
+[class*="col-"]{                /*Css responsive W3 SCHOOL "RWD MEDIA QUERIES"*/
+float:left;
+padding:15px
+}
+
+
+.col-1 {width: 8.33%;}          /*Css responsive W3 SCHOOL "RWD MEDIA QUERIES"*/
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+
+
+/* -------------------------------Ireto partie ireto dia hitambaran'ny page rehetra-----------------------------------*/
+body{
+margin:0;
+padding:0;
+font-family: "Lucida Grande", sans-serif;
+font-size:14px;
+color: white;
+background-color: #000333;
+}
+
+/*ilay sary eo ambony amin'ny page d'acceuil fotsiny*/
+/*eto izao dia tsy misy code ao anatin'ny tag header ao amin'ilay code html fa eto fotsiny isika no mampiasa azy*/
+div.header{
+position:relative;
+height:100px;
+width:100%;
+border-radius:0px;
+}
+div.footer{
+padding:15px;
+background-color:#21277c;
+}
+
+a {
+color:white;
+text-decoration: none;
+}
+
+form{
+padding:15px;
+border: 1px solid white;
+border-radius: 5px;
+background-color:#21277c;
+opacity:1;
+}
+/* Le nom d'utilisateur -----------------------*/
+body #divname1{
+height:50px;
+width: 300px;
+position : absolute;
+right: 10px;
+font-size: 16px;
+margin: 0 0 0 0;
+padding:0 0 0 0;
+cursor:pointer
+}
+
+#name {
+position: absolute;
+right:0px;
+top:5px;
+margin: 0 0 0 0
+}
+
+body p#function{
+position:absolute;
+right:0px;
+bottom: 1px;
+margin: 0 0 0 0;
+cursor:pointer
+}
+#deconnecter{
+background-color:red;
+border-radius:0px;
+position:absolute;
+padding:10px;
+right:0px;
+bottom:50px;
+box-shadow: 3px 3px 16px  grey;
+display:none;
+}
+#divname1:hover #deconnecter{
+display:block
+}
+/* fin nom d'utilisateur--------------------*/
+
+
+/* ------------------------------------------POUR LA PAGE LOGIN seulement-------------------------------------------*/
+section.content {               /* ny id dia selectionner-na amin'ny diese */
+position: absolute;
+top: 170px;
+left:50%;
+width:500px;
+margin: 0 0 0 -250px;  /*-250 satria manomboka eo am 50% ny section antsika dia mila mihemotra 250 px any am gauche*/
+padding:20px;
+}
+
+
+
+/* Miseho automatiquement any anaty code html ny ul class = error list raha misy erreur... C'est a cause de la presence
+de la fonction is_valid()*/
+ul.errorlist{     /* ny "." dia mi selectionnner class ao amin'ny html - PAGE 231 programmation avec python et django*/
+background: rgb(255, 99, 71) ;
+opacity:1;
+border: 1px solid red;
+border-radius:3px;
+width: 250px;
+margin-left:170px;
+padding:3px;
+list-style-type: none;
+color : white;
+text-align:left;
+}
+
+div.footer { /*ilay ora ity*/
+position:absolute;
+bottom: 0px;
+background-color: #21277c;
+width:100%;
+text-align:center;
+padding:0;
+margin:0;
+}
+h3#Login{
+text-align:center;
+}
+/*-----------------------------------------POUR LA PAGE DE CREATION DE COMPTE*----------------------------------------*/
+
+/*soratra Creation de compte ao amin'ny page creation de compte*/
+h1#creationcompte{
+text-align: center;
+font-size:30px;
+color:white;
+border-bottom: 2px solid blue;
+margin: 0 0 5px 0;
+padding: 0 0 0 0;
+}
+section#content1 {               /* ny id dia selectionner-na amin'ny diese */
+position : absolute;
+top: 120px;
+left:50%;
+width:500px;
+margin: 0 0 0 -250px;
+padding:0px;
+}
+@media only screen and (max-width: 767px){
+    section#content1{
+    top:100px;
+    width:100%;
+    left:0%;
+    margin: 0 0 0 0;
+    }
+}
+form input[type="submit"]{
+margin:2px 20px 0 170px;
+border-style:solid;
+border-width:1px;
+border-color: blue black black blue;
+background-color: #21277c;
+color: #FFFFFF;
+padding:3px 15px 3px 15px;
+text-align:center;
+}
+
+/*----------------------------------------POUR LA PAGE D'ACCEUIL (WELCOME)--------------------------------------------*/
+section#content2 {               /* ny id dia selectionner-na amin'ny diese */
+position : absolute;
+top:100px;  /*satria miala an'ilay sary (logo), sinon mifanitsaka*/
+width:100%;
+background-color:None
+}
+#divname {
+position:relative;
+width:100%;
+height: 52px;
+background-color: #000333;
+border-color:#000333;
+color:white;
+padding:0px;
+box-shadow: 5px 4px 4px rgba(0, 0, 0, 0.25);
+
+}
+div#divname:hover{
+background-color: #bf100626;
+}
+
+
+/* Ireto no ao anaty page welcome*/
+    /*raha tsy misy property "position" ny zavatra iray dia tsy mety asina property "top, right left bottom"*/
+
+
+form#UploadFile input[type="submit"]{
+position:relative;
+left:0px;
+margin:0 0 0 0
+}
+
+form#UploadFile input[type="file"]{
+position:relative;
+top:0px;
+left:15px;
+}
+
+form#UploadFile label{
+display: None;          /* Nafeniko ilay Label fa misy label "Fichier" io*/
+}
+
+
+.menu ul{           /*ilay liste amin'ny cote a gauche ao am page d'acceuil*/
+list-style-type:none;
+margin:0;
+padding:0
+}
+
+.menu li{
+  padding: 8px;
+  margin-bottom: 10px;
+  background-color: #21277c;
+  color: white;
+  box-shadow: 0 4px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  text-align:center;
+  cursor:pointer
+}
+.col-7 h1{
+margin:0;
+}
+
+
+.col-7 p{
+border: 1px solid #ffecf37c;
+background-color: #ffecf37c;
+padding: 5px;
+text-align:center;
+color: white;
+box-shadow: 0 1px 7px white;
+l
+}
+
+
+
+/*--------------------------------------RESULTAT HTML------------------------------------------------------*/
+@media only screen and (max-width:1300px){
+#table {
+   display:none
+   }
+}
+
+form#resultat{
+padding:10px;
+
+
+}
+
+form#resultat input[type="number"]{
+position:absolute;
+width:40px;
+left:50%;
+top:1px;
+margin-left:-20px  /* Baikoina amin'ity left ity foana izy rehefa tiana hikisaka horizontalement*/
+}
+form#resultat input[type="submit"]{
+position:absolute;
+border: 1px solid white;
+border-radius:3px;
+width:120px;
+left:50%;
+top:20px;
+margin-left:-60px  /* Baikoina amin'ity left ity foana izy rehefa tiana hikisaka horizontalement*/
+}
+
+
+
+
+/*------------------------------itambaran'ny formulaire login sy creation de compte----------------------------------*/
+form label {
+color:white;
+display: block;
+width:160px;
+float:left;         /* ito ilay mahatonga ilay soratra a gauche dia champ de saisie à droite */
+text-align:left;
+padding : 3px 10px 0 0;
+margin-right:10px;
+margin-bottom: 5px
+}
+
+form input[type="email"], form input[type="text"],
+form input[type="password"], form input[type="number"]{
+display:block;
+width:140px;
+padding:0px;
+box-sizing:border-box;
+border: 1px solid #00000;
+box-shadow: 5px 4px 4px rgba(0, 0, 0, 0.25);
+translation: all 0.5s;
+}
+
+form select{      /*IREO INPUT FANAOVANA SELECTION (FACULTY, GENRE, CURSUS, VOUS ETES?)*/
+box-shadow: 5px 4px 4px rgba(0, 0, 0, 0.25);  /*suivant x, suivant y, opacity and color of the shadow CSS SHADOW */
+}
+
+/* ANIMATION KELY HO AN"NY INPUT IRETO RAHA VAO MI-FOCUS EO AMIN'N'IREO CHAMP DE SAISIE (tsy nisy tuto fa ekeo ftsn)*/
+/* ItAkO TANATY INSTAGRAM FOTSINY IRETO FA TSY MISY TUTO (EKEO FOTSINY)*/
+/* HiTA ao @ CSS REFERENCE - SELECTORS (W3 School) raha te hianatra saingy tsy nianarako ireto*/
+form input[type="email"]:focus {
+outline: none;             /* misy ligne maintimainty kely ilay case à remplir rehefa selectionner-na de esorina eto*/
+box-shadow: 0px 0px 15px white;
+background-color:white
+}
+form input[type="text"]:focus {
+outline: none;
+box-shadow: 0px 0px 15px white;
+background-color:white
+}
+form input[type="password"]:focus {
+outline: none;
+box-shadow: 0px 0px 15px white;
+background-color:white
+}
+form input[type="number"]:focus {
+outline: none;
+box-shadow: 0px 0px 15px white;
+background-color:white
+}
+
+form select:focus {
+outline: none;
+box-shadow: 0px 0px 15px white;
+background-color:white
+}
+
+/* --------------------------------------FAMPIASANA @media ATO AMIN'NY CSS --------------------------------------------
+
+Jerena tsara ilay parametre tamin'ny voalohany (tamin'ilay ecran lehibe) dia ireny no modifier-na fa sao harary an-
+doha eo...
+tena mila fadina ny mampiasa parametre width ka lava be ny ao anatiny fa iny ilay nampikorontana teo foana
+rehefa mampiasa ecran kelikely manko dia mbola ao iny parametre width iny. Donc lasa manao scroll horizontale ny utili-
+sateur... tsy mety loatra izay.
+
+tsy mety koa ny mampiasa ny @media raha toa ka lasa any alohan'ny parametre ho- modifier-na izy (rehefa mamaky
+code manko dia avy any ambony mankany ambany). Tsy maintsy efa voatonona izany aloha ny parametre iray vao azo
+modifier-naamin'ny alalan'ny @media izy. SINON TSY MANDEHA MIHITSY IO.. izay no mahatonga ireto @media ireto nataoko
+tato amin'ny farany ambany ato satria amin'izay efa sur tsara hoe efa ao ambony ao ry zareo fa no-modifier-na
+fotsiny arakaraka ny haben'ny ecran
+
+*/
+/*REHEFA KELY NOHO NY 767px NY ECRAN AMPIASAINA*/
+@media only screen and (max-width:767px){
+    form input[type="submit"]{
+    margin:2px 20px 0 170px;
+    }
+    a#loginandcreateaccount{
+    display:block;
+    color:red;
+    margin:10px 20px 0 170px
+    }
+
+    div.header{
+    position:relative;
+    height:80px;
+    }
+    section#content2 {
+    position: absolute;
+    top:80px;
+    width:100%;
+    }
+    [class*="col-"]{                /*Css responsive W3 SCHOOL "RWD MEDIA QUERIES"*/
+    width:100%
+    }
+    form#UploadFile input[type="submit"]{
+    left:15px;
+    margin:0 0 0 0
+    }
+}
+/*REHEFA KELY NOHO NY 500 NY ECRAN AMPIASAINA*/
+
+@media only screen and (max-width: 500px){
+    section.content{
+    top:150px;
+    width:100%;
+    left:0;
+    margin: 0 0 0 0;
+    }
+    form label{
+    color:white;
+    display: block;
+    width:160px;
+    float:left;         /* ito ilay mahatonga ilay soratra a gauche dia champ de saisie à droite */
+    text-align:left;
+    padding : 3px 2px 0 0;
+    margin-right:0px;
+    margin-bottom: 5px
+    }
+    a#loginandcreateaccount{
+    display:block;
+    color:red;
+    margin:10px 20px 0 160px
+    }
+    form input[type="submit"]{
+    margin:2px 20px 0 160px;
+    }
+    [class*="col-"]{                /*Css responsive W3 SCHOOL "RWD MEDIA QUERIES"*/
+    width:100%
+    }
+    form#UploadFile input[type="submit"]{
+    left:15px;
+    margin:3px 0 0 0
+    }
+    form#UploadFile select{
+    margin:0 0 3px 15px;
+    }
+    footer{
+	display:none
+}
+}

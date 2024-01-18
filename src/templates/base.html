@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!--parametrer un site responsive-->
+                                                                            <!--RWD viewport W3School (CSS)-->
+
+    <title>BILHYD - {% block title %} {% endblock title %}</title>
+    <link rel="stylesheet" href="/static.com/css/styl.css"/> <!--liaison, nous avons un
+                                                                            fichier css externe-->
+    <script src="/static.com/chartjs/chart.js"></script>
+    <script src="/static.com/js/jquery-3.6.0.min.js"></script>
+</head>
+
+
+<body id = "{% block bodyId%} GenericPage {% endblock %}">
+    <div class="header">
+            <img src="/static.com/img/Bilhyd.png" style="height:100% ; width:30% ; position:absolute; left:0">
+            <img src="/static.com/img/logo1.jpg" style="height:100% ; width:70% ; position:absolute; right:0">
+    </div>
+                                         <!--Section an'ilay login-->
+    <section class="content">
+        {% block content %} {% endblock %}
+    </section>
+                                    <!--Section de la page creation de compte-->
+    <section id = "content1">
+        {% block content1 %} {% endblock %}
+    </section>
+                                <!--Section de la page d'acceuil -->
+    <section id = "content2">
+        {% block content2 %} 
+
+        {% endblock content2 %}
+    </section>
+
+
+</body>
+
+</html>

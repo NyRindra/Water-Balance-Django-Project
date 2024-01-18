@@ -1,0 +1,647 @@
+{% extends "base.html"%}
+{% block title %}
+    Données
+{%endblock title%}
+{% block content2 %}
+
+
+<style>
+    table {
+    border-radius : 5px;
+    font-size:12px;
+    font-weight: normal;
+    border:none;
+    border-collapse:collapse;
+    width:100%;
+    max-width:100%;
+    white-space:nowrap;    /* Make the border of all cell to be unique*/
+    background-color:white;
+    border: 1px solid #1A2929
+    }
+    thead,th{
+    color:#ffffff;
+    background: #1A2929
+    }
+    td,th{
+    text-align:center;
+    padding:8px;
+    border-right:1px solid #1A2929
+    }
+    
+
+
+
+</style>
+
+
+</style>
+
+<div id="divname">
+    <div id="divname1">
+    <address>
+    <p id="name">{{logged_user.prénom}} {{logged_user.nom}}</p>
+    <p id="function">
+        {% if logged_user.person_type == "student"%}
+        Etudiant en
+            {% if logged_user.année == 1 %}
+                {{ logged_user.année }}ère
+            {%else%}
+                {{logged_user.année}}ème
+            {% endif %}
+            année
+            ({{logged_user.cursus.title}})
+        {% else %}
+           <!-- {{logged_user.job.title|capfirst}} dans {{logged_user.faculty}}  fomba fampiasa raha mampiasa foreign key-->
+            {{logged_user.poste|capfirst}} à {{logged_user.lieu_de_travail}}
+        {%endif%}
+    </p>
+    </address>
+        <div id="deconnecter"><a href="/login">Se déconnecter</a></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2 menu">
+        <ul  >
+            {%if RFU %}
+            <li style="background-color: #ffecf37c" > RFU : {{RFU}} mm </li>
+            {% elif RU%}
+            <li style="background-color: #ffecf37c">RU : {{RU}}/cm de profondeur</li>
+            {%endif%}
+        </ul>
+        <br>
+       <ul >
+            <p style="text-align:center">QUELLE METHODE DESIREZ VOUS?</p>
+            <li onclick="thorntwaite()" id="thorntwaite">THORNTWAITE</li>
+            <li onclick="turc()" id="turc">TURC</li>
+
+        </ul>
+        {% if RFU %}
+        <br>
+        <ul>
+        <li style="background-color:red; border-radius:3px"><a style="" id="METH" href="/succes?profondeur=0&methode=" >VALIDER</a></li>
+        </ul>
+        {%endif%}
+        {% if RU%}
+        <ul>
+            <br>
+            <p style="text-align:center">ENRACINEMENT DE VOTRE SOL<p>
+            <li onclick="RFU_bien()" id="bien" >~ 100 %</li>
+            <li onclick="RFU_moyen()" id="moyen" >~ 50 %</li>
+            <li onclick="RFU_peu()" id="peu" >~ 25 %</li>
+
+        </ul>
+        <br>
+        <p  style="text-align:center">PROFONDEUR D'ENRACINEMENT (cm)</p>
+        <div style="position:relative">
+            <form id="resultat" action="/succes" method="get">
+                <input id="methode" type="hidden" name="methode" value="">
+                <input id="rapport_RU_RFU" type="hidden" value="" name="rapport_RU_RFU">   <!-- ito ilay hoe 1/2 ve sa 1/3 ve sa 2/3 ny RFU-->
+                <label for="profondeur" style="display:none; text-align:center"></label>
+                <input type="number" id="profondeur" name="profondeur" min="40" max="150" step="10" required>
+                    <br>
+                <input type="submit" value="VALIDER">
+            </form>
+        </div>
+        {%endif%}
+    </div>
+
+    <div class="col-7">
+        {%if erreur%}
+        <h3 style="color:white;background-color:rgb(255, 99, 71);text-align:center">{{erreur}}</h3>
+        {%endif%}
+        <h1 style="text-align:center;">Methode de THORNTWAITE ou methode de TURC?</h1>
+        <p>Vous trouverez ici, les données saisis dans votre fichier Excel.
+            Sans les données d'humidités, si vous choisissez la méthode de TURC,
+            vos calculs seront faites en prenant en considération que vous avez des
+            valeurs supérieurs  à 50% </p>
+        <p>Sélectionnez une méthode, puis cliquez sur suivant
+        </p>
+        <div id="table">
+        {% if 1 in Nb_année%}
+        <table style="width:100%; text-align:center; background-color:#21277c" id="A1">
+            <tr style="text-align:center;">
+                <th>{{A1}}
+                </th>
+                <th>J</th>
+                <th>F</th>
+                <th>M</th>
+                <th>A</th>
+                <th>M</th>
+                <th>J</th>
+                <th>J</th>
+                <th>A</th>
+                <th>S</th>
+                <th>O</th>
+                <th>N</th>
+                <th>D</th>
+            </tr>
+
+            <tr>
+                <td>TEMPERATURE</td>
+                {%for i in T1%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+                <td> PLUIE </td>
+                {%for i in P1%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+
+            <tr>
+                <td> INSOLATION </td>
+                {%for i in I1%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+        </table>
+        {% endif%}
+        <br>
+        {% if 2 in Nb_année%}
+        <table style="width:100%; text-align:center ; background-color: #bf100626" id="A2">
+            <tr style="text-align:center;">
+                <th>{{A2}}
+                </th>
+                <th>J</th>
+                <th>F</th>
+                <th>M</th>
+                <th>A</th>
+                <th>M</th>
+                <th>J</th>
+                <th>J</th>
+                <th>A</th>
+                <th>S</th>
+                <th>O</th>
+                <th>N</th>
+                <th>D</th>
+            </tr>
+
+            <tr>
+                <td>TEMPERATURE</td>
+                {%for i in T2%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+
+                <td> PLUIE </td>
+                {%for i in P2%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+            <tr>
+                <td> INSOLATION </td>
+                {%for i in I2%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+        </table>
+        {% endif %}
+        <br>
+        {% if 3 in Nb_année%}
+        <table style="width:100%; text-align:center ;  background-color:#21277c" id="A3">
+            <tr style="text-align:center;">
+                <th>{{A3}}
+                </th>
+                <th>J</th>
+                <th>F</th>
+                <th>M</th>
+                <th>A</th>
+                <th>M</th>
+                <th>J</th>
+                <th>J</th>
+                <th>A</th>
+                <th>S</th>
+                <th>O</th>
+                <th>N</th>
+                <th>D</th>
+            </tr>
+
+            <tr>
+                <td>TEMPERATURE</td>
+                {%for i in T3%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+                <td> PLUIE </td>
+                {%for i in P3%}
+                <td> {{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+                <td> INSOLATION </td>
+                {%for i in I3%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+        </table>
+        {%endif%}
+
+        <br>
+        {% if 4 in Nb_année%}
+        <table style="width:100%; text-align:center ; background-color: #bf100626" id="A4">
+            <tr style="text-align:center;">
+                <th>{{A4}}
+                </th>
+                <th>J</th>
+                <th>F</th>
+                <th>M</th>
+                <th>A</th>
+                <th>M</th>
+                <th>J</th>
+                <th>J</th>
+                <th>A</th>
+                <th>S</th>
+                <th>O</th>
+                <th>N</th>
+                <th>D</th>
+            </tr>
+
+            <tr>
+                <td>TEMPERATURE</td>
+                {%for i in T4%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+
+                <td> PLUIE </td>
+                {%for i in P4%}
+                <td> {{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+                <td> INSOLATION </td>
+                {%for i in I4%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+        </table>
+        {%endif%}
+        <br>
+        {% if 5 in Nb_année%}
+        <table style="width:100%; text-align:center ; background-color:#21277c" id="A5">
+            <tr style="text-align:center;">
+                <th>{{A5}}
+                </th>
+                <th>J</th>
+                <th>F</th>
+                <th>M</th>
+                <th>A</th>
+                <th>M</th>
+                <th>J</th>
+                <th>J</th>
+                <th>A</th>
+                <th>S</th>
+                <th>O</th>
+                <th>N</th>
+                <th>D</th>
+            </tr>
+
+            <tr>
+                <td>TEMPERATURE</td>
+                {%for i in T5%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+
+                <td> PLUIE </td>
+                {%for i in P5%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+            <tr>
+                <td> INSOLATION </td>
+                {%for i in I5%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+        </table>
+        {%endif%}
+        <br>
+        {% if 6 in Nb_année%}
+        <table style="width:100%; text-align:center ; background-color: #bf100626" id="A6">
+            <tr style="text-align:center;">
+                <th>{{A6}}
+                </th>
+                <th>J</th>
+                <th>F</th>
+                <th>M</th>
+                <th>A</th>
+                <th>M</th>
+                <th>J</th>
+                <th>J</th>
+                <th>A</th>
+                <th>S</th>
+                <th>O</th>
+                <th>N</th>
+                <th>D</th>
+            </tr>
+
+            <tr>
+                <td>TEMPERATURE</td>
+                {%for i in T6%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+
+                <td> PLUIE </td>
+                {%for i in P6%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+            <tr>
+                <td> INSOLATION </td>
+                {%for i in I6%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+        </table>
+        {% endif %}
+        <br>
+
+        {% if 7 in Nb_année%}
+        <table style="width:100%; text-align:center ;  background-color:#21277c" id="A7">
+            <tr style="text-align:center;">
+                <th>{{A7}}
+                </th>
+                <th>J</th>
+                <th>F</th>
+                <th>M</th>
+                <th>A</th>
+                <th>M</th>
+                <th>J</th>
+                <th>J</th>
+                <th>A</th>
+                <th>S</th>
+                <th>O</th>
+                <th>N</th>
+                <th>D</th>
+            </tr>
+
+            <tr>
+                <td>TEMPERATURE</td>
+                {%for i in T7%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+
+                <td> PLUIE </td>
+                {%for i in P7%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+            <tr>
+                <td> INSOLATION </td>
+                {%for i in I7%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+        </table>
+        {%endif%}
+        <br>
+        {% if 8 in Nb_année%}
+        <table style="width:100%; text-align:center; background-color: #bf100626" id="A8">
+            <tr style="text-align:center;">
+                <th>{{A8}}
+                </th>
+                <th>J</th>
+                <th>F</th>
+                <th>M</th>
+                <th>A</th>
+                <th>M</th>
+                <th>J</th>
+                <th>J</th>
+                <th>A</th>
+                <th>S</th>
+                <th>O</th>
+                <th>N</th>
+                <th>D</th>
+            </tr>
+
+            <tr>
+                <td>TEMPERATURE</td>
+                {%for i in T8%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+
+                <td> PLUIE </td>
+                {%for i in P8%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+            <tr>
+                <td> INSOLATION </td>
+                {%for i in I8%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+        </table>
+        {%endif%}
+        <br>
+        {% if 9 in Nb_année%}
+        <table style="width:100%; text-align:center ;  background-color:#21277c" id="A9">
+            <tr style="text-align:center;">
+                <th>{{A9}}
+                </th>
+                <th>J</th>
+                <th>F</th>
+                <th>M</th>
+                <th>A</th>
+                <th>M</th>
+                <th>J</th>
+                <th>J</th>
+                <th>A</th>
+                <th>S</th>
+                <th>O</th>
+                <th>N</th>
+                <th>D</th>
+            </tr>
+
+            <tr>
+                <td>TEMPERATURE</td>
+                {%for i in T9%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+
+                <td> PLUIE </td>
+                {%for i in P9%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+            <tr>
+                <td> INSOLATION </td>
+                {%for i in I9%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+        </table>
+        {%endif%}
+        <br>
+        {% if 10 in Nb_année%}
+        <table style="width:100%; text-align:center ;background-color: #bf100626" id="A10">
+            <tr style="text-align:center;">
+                <th>{{A10}}
+                </th>
+                <th>J</th>
+                <th>F</th>
+                <th>M</th>
+                <th>A</th>
+                <th>M</th>
+                <th>J</th>
+                <th>J</th>
+                <th>A</th>
+                <th>S</th>
+                <th>O</th>
+                <th>N</th>
+                <th>D</th>
+            </tr>
+
+            <tr>
+                <td>TEMPERATURE</td>
+                {%for i in T10%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+            <tr>
+
+                <td> PLUIE </td>
+                {%for i in P10%}
+                <td> {{i}}</td>
+                {%endfor%}
+
+            </tr>
+            <tr>
+
+                <td> INSOLATION </td>
+                {%for i in I10%}
+                <td>{{i}}</td>
+                {%endfor%}
+            </tr>
+
+        </table>
+        {%endif%}
+        </div>
+    </div>
+
+    <div class="col-3 menu">
+        <p style="text-align:center">Les années trouvées</p>
+        <ul>
+            {%for i in Année%}
+            <li style="text-align:center" id="{{i}}">{{i}}</li>
+
+            {%endfor%}
+
+        </ul>
+        </ul>
+    </div>
+
+     <div class="col-12">
+            <address style="text-align: center;font-size:12px" title="">
+        Créé par RAKOTONOELY Ny Rindra Harilala<br>
+        Etudiant à l'ESPA - Météorologie<br>
+        <a href="mailto:ny.rindra.rk@gmail.com">ny.rindra.rk@gmail.com</a>
+        <!--<p>{{dat|date:"d F Y , H:i:s"}}</p>-->
+        </address>
+        
+    </div>    
+    {% if RU %}
+    <script>
+    function turc(){
+        $("#methode").attr("value", "TURC");
+        $("#turc").css("background-color", "#ffecf37c");
+        $("#thorntwaite").css("background-color", "#21277c")
+        };
+    function thorntwaite(){
+        $("#methode").attr("value", "THORNTWAITE");
+        $("#turc").css("background-color", "#21277c");
+        $("#thorntwaite").css("background-color", "#ffecf37c")
+        };
+
+    function RFU_peu() {
+        $("#rapport_RU_RFU").attr("value", "0.333333333333");
+        $("#bien").css("background-color", "#21277c");
+        $("#moyen").css("background-color", "#21277c");
+        $("#peu").css("background-color", "#ffecf37c")
+        };
+    function RFU_moyen() {
+        $("#rapport_RU_RFU").attr("value", "0.5");
+        $("#bien").css("background-color", "#21277c");
+        $("#moyen").css("background-color", "#ffecf37c");
+        $("#peu").css("background-color", "#21277c")
+        };
+    function RFU_bien() {
+        $("#rapport_RU_RFU").attr("value", "0.666666666666");
+        $("#bien").css("background-color", "#ffecf37c");
+        $("#moyen").css("background-color", "#21277c");
+        $("#peu").css("background-color", "#21277c")
+        };
+    $(document).ready(function(){
+        $("#methode").attr("value", "");
+        $("#turc").css("background-color", "#21277c");
+        $("#thorntwaite").css("background-color", "#21277c");
+
+        $("#rapport_RU_RFU").attr("value", "");
+        $("#bien").css("background-color", "#21277c");
+        $("#moyen").css("background-color", "#21277c");
+        $("#peu").css("background-color", "#21277c");
+    });
+    </script>
+
+    {% elif RFU %}
+    <script>
+        function turc(){
+        $("#methode").attr("value", "TURC");
+        $("#turc").css("background-color", "#ffecf37c");
+        $("#thorntwaite").css("background-color", "#21277c");
+        $("#METH").attr("href", "/succes?profondeur=0&methode=TURC");
+        };
+        function thorntwaite(){
+        $("#methode").attr("value", "THORNTWAITE");
+        $("#turc").css("background-color", "#21277c");
+        $("#thorntwaite").css("background-color", "#ffecf37c");
+        $("#METH").attr("href", "/succes?profondeur=0&methode=THORNTWAITE");
+        };
+
+    $(document).ready(function(){
+        $("#methode").attr("value", "");
+        $("#turc").css("background-color", "#21277c");
+        $("#thorntwaite").css("background-color", "#21277c");
+
+    });
+    </script>
+    <script>            
+        window.localStorage.clear()             
+    </script>
+
+
+    {% endif %}
+
+</div>
+{% endblock content2 %}

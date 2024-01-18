@@ -1,0 +1,32 @@
+{% extends "base.html"%}                            <!--Extension de base.html-->
+
+{% block title %} Connexion {% endblock title%}     <!--titre Connection-->
+{% block bodyId %} loginPage {% endblock %}         <!--Nous specifions un id Login page au balise body-->
+
+{% block content %}                           <!--debut du contenue reel de notre page Login-->
+<form action="login" method = "post" >          <!--io soratra login io tonga dia lasa any amin'ny chemin URL-->
+    {%csrf_token%}          <!--BOKY PAGE 222-->
+    {% if error %}          <!-- si nous avons des erreurs dans le remplissage du formulaire login-->
+    <p class="error"> {{error}}</p>
+    {% endif %}
+    <p>     <!--paragraphe pour le champ "Courriel"-->
+        <label for="email"> Courriel :</label>                 <!--The "for" attribute of the <label> tag should be equal
+                                                                    to the "id" attribute of the <input> element
+                                                                    to bind them together.-->
+        <input name="email" id="email" size = 30 type="email"/> <!-- io attribut name io no lasa any
+                                                                        anaty objet request.post-->
+    </p>
+    <p>     <!--paragraphe pour le champ "Mot de passe"-->
+        <label for="password"> Mot de passe : </label>
+        <input name="password" id="password" size = 30 type="password"/>
+    </p>
+    <p>     <!--paragraphe pour le bouton de connection et lien vers la page de creation de compte"-->
+        <input type="submit" value="Se connecter"/>
+        <a href="">Creer un compte</a>
+    </p>
+</form>
+{% endblock %}
+
+
+
+

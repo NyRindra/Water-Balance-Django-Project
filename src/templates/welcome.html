@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title%} Acceuil{% endblock title %}
+
+{% block bodyId %}
+    welcomePage
+{%endblock%}
+
+{% block content2 %}
+<div id="divname">
+    <div id="divname1">
+    <address>
+    <p id="name">{{logged_user.prénom}} {{logged_user.nom}}</p>
+    <p id="function">
+        {% if logged_user.person_type == "student"%}
+        Etudiant en
+            {% if logged_user.année == 1 %}
+                {{ logged_user.année }}ère
+            {%else%}
+                {{logged_user.année}}ème
+            {% endif %}
+            année
+            ({{logged_user.cursus.title}})
+        {% else %}
+           <!-- {{logged_user.job.title|capfirst}} dans {{logged_user.faculty}}  fomba fampiasa raha mampiasa foreign key-->
+            {{logged_user.poste|capfirst}} à {{logged_user.lieu_de_travail}}
+        {%endif%}
+
+    </p>
+    </address>
+        <div id="deconnecter"><a href="/login">Se déconnecter</a></div>
+    </div>
+</div>
+
+<!--tsy maintsy method="post" sy misy an'io attribut enctype io rehefa maka fichier (TANATY NET)-->
+<!--tsy maintsy asiana an'io enctype io ihany koa sinon tsy lasa ilay fichier-->
+
+<div class="row"> <!--Css responsive RWD W3 SCHOOL-->
+    <div class="col-2 menu">
+        <ul>
+            <li onclick="hideimage()" id="rfubasic" style="text-align:center">RFU = 100mm</li>
+            <li onclick="showimage()" id="rfu_calcul" style="text-align:center">RFU avancé</li>
+        </ul>
+
+
+    </div>
+    <div class="col-7" >
+        <h1>Bienvenue sur BIL-HYD</h1>
+        <p>BIL-HYD est un programme qui va vous permettre de faire des calculs des termes du bilan hydrique par la méthode de THORNTWAITES ou TURC</p>
+        <p>Vous avez besoin de joindre vos données dans un fichier Excel. <a style=" text-decoration: underline;"href="/media.com/User_data/bilhyd.xlsx" download>   <!--ito alay STATIC_URL-->
+           Téléchargez </a>, le modèle du fichier Excel à remplir
+             </p>
+
+        <img src="/static.com/img/Diagramme de texture - Copie.png" style="width:100%;" id="imagetypedeterre">
+
+        <!--tsy maintsy asina attribut enctype ny formulaire rehefa te hi-upload fichier amin'ny django,
+         sinon, nous aurons seulement le nom du fichier mais le fichier n'est pas téléchargé-->
+    <form id="UploadFile" action="/welcome/" method="post" enctype = multipart/form-data >
+        {%csrf_token%}
+        <input type ='hidden' name = 'RFU' value ="100" id="RFU"/>
+        <label for="select" > Type de terre </label>
+        <select id="select" name="RU">
+            <option value="0.70">Sableuses</option>
+            <option value="1">Sablo-limoneuse</option>
+            <option value="1.55">Limono-sableuses</option>
+            <option value="1.80">Limoneuse</option>
+            <option value="1.40">Sablo-argileuses</option>
+            <option value="1.50">Sablo-limono-argileuses</option>
+            <option value="1.65">Limono-sablo-argileuses</option>
+            <option value="2">Limono-argileuses</option>
+            <option value="1.70">Argilo-sableuses</option>
+            <option value="1.70">Argilo-sablo-limoneuse</option>
+            <option value="1.80">Argilo-limono-sableuses</option>
+            <option value="2">Argilo-limoneuses</option>
+            <option value="1.70">Argiles Sableuses</option>
+            <option value="1.80">Argiles Sablo-limoneuse</option>
+            <option value="1.80">Argile limono-sableuses</option>
+            <option value="1.90">Argiles limoneuse</option>
+            <option value="1.85">Terres Argileuses</option>
+            <option value="1.20">Terre Argileuses lourdes</option>
+        </select>
+
+        {{formulaire}}
+        <input  id="upload" type="submit" value="Suivant" />
+
+
+    </form>
+
+        <address style="text-align: center; font-size:12px ;margin-top: 15px;" title="">
+        Créé par RAKOTONOELY Ny Rindra Harilala<br>
+        Etudiant à l'ESPA - Météorologie<br>
+        <a href="mailto:ny.rindra.rk@gmail.com">ny.rindra.rk@gmail.com</a>
+        <!--<p>{{dat|date:"d F Y , H:i:s"}}</p>-->
+        </address>
+
+    <div class="col-2"></div>
+
+
+    </div>
+        
+
+<script>
+    // fonction Jquery
+    function hideimage() {
+        $("#imagetypedeterre").hide();
+        $("#rfubasic").css("background-color", "#ffecf37c");
+        $("#rfu_calcul").css("background-color", "#21277c");
+        $("#select").hide();
+        $("#RFU").attr("value", "100");
+        $("#profondeur").hide()
+        };
+    function showimage() {
+        $("#imagetypedeterre").show();
+        $("#rfu_calcul").css("background-color", "#ffecf37c");
+        $("#rfubasic").css("background-color", "#21277c");
+        $("#select").show();
+        $("#RFU").attr("value", "0");
+        $("#profondeur").show()      // JQUERY SET  na koa JS HTML DOM  (W3school)
+        };
+    $(document).ready(hideimage());
+</script>
+
+{%endblock content2%}
+
